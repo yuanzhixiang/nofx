@@ -1,8 +1,6 @@
 networks:
   traefik:
     external: true
-  nofx-network:
-    driver: bridge
 
 services:
   # Backend service (API and core logic)
@@ -21,7 +19,7 @@ services:
     environment:
       - TZ=${NOFX_TIMEZONE:-Asia/Shanghai}  # Set timezone
     networks:
-      - nofx-network
+      - traefik
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
       interval: 30s
@@ -38,7 +36,6 @@ services:
     restart: unless-stopped
     networks:
       - traefik
-      - nofx-network
     depends_on:
       - nofx
     labels:
